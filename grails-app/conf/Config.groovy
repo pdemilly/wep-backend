@@ -114,4 +114,22 @@ log4j.main = {
            'org.springframework',
            'org.hibernate',
            'net.sf.ehcache.hibernate'
+
+        all 'org.codehaus.groovy.grails.web.mapping'
+        all 'org.codehaus.groovy.grails.web.mapping.filter'
+        all 'com.brandseye.cors'
 }
+
+cors.allow.origin.regex = 'http:\\/\\/dev\\.newgenesys\\.com|http:\\/\\/fiddle\\.jshell\\.net|http:\\/\\/jsfiddle\\.net|http:\\/\\/crs\\.newgenesys\\.com'
+// cors.headers = ['Access-Control-Allow-Origin': ~/http:\/\/dev.newgenesys.com|http:\/\/fiddle.jshell.net|http:\/\/jsfiddle.net|http:\/\/crs.newgenesys.com/ ]
+cors.enabled = true
+
+grails.mongo.default.mapping = {
+    '*'(reference: true)
+}
+
+// Default binding for Dates
+grails.databinding.dateFormats = [ 'yyyy-MM-dd', 'yyyy-MM-dd HH:mm:ss.S', "yyyy-MM-dd'T'hh:mm:ss'Z'" ]
+
+grails.resources.adhoc.patterns = ['/images/*', '/img/*', '/css/*', '/js/*', '/plugins/*']
+grails.resources.adhoc.includes = ['/images/**', '/img/**', '/css/**', '/js/**', '/plugins/**']
