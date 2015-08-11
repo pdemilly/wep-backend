@@ -47,6 +47,8 @@ grails.project.dependency.resolution = {
         mavenRepo "http://repository.jboss.com/maven2/"
 
 	mavenRepo "http://mvn.newgenesys.com/content/groups/crs-framework"
+
+	mavenRepo 'http://google-api-client-libraries.appspot.com/mavenrepo'
     }
 
     dependencies {
@@ -61,6 +63,13 @@ grails.project.dependency.resolution = {
         runtime 'com.firebase:firebase-client-jvm:2.2.4'        // Firebase
         runtime 'com.firebase:firebase-token-generator:2.0.0'
         runtime 'org.jdeferred:jdeferred-core:1.2.3'
+
+	runtime 'com.google.http-client:google-http-client-jackson:1.12.0-beta'
+	runtime 'com.google.api-client:google-api-client:1.12.0-beta'
+	runtime 'com.google.apis:google-api-services-drive:v2-rev30-1.12.0-beta'
+        runtime 'commons-io:commons-io:2.4'
+
+	runtime 'jmimemagic:jmimemagic:0.1.2'
 
     }
 

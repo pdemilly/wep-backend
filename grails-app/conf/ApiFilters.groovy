@@ -77,6 +77,28 @@ class ApiFilters {
 			}
 		}
 
+		// TODO: We should validate before uploading documents - good for now
+
+		download (uri: '/upload/**') {
+			before = {
+				if (request.JSON) {
+					params.data = [:]
+					params.data << request.JSON
+				}
+				return checkAuthorization (request)
+			}
+		}
+
+		download (uri: '/fs/**') {
+			before = {
+				if (request.JSON) {
+					params.data = [:]
+					params.data << request.JSON
+				}
+				return checkAuthorization (request)
+			}
+		}
+
 		download (uri: '/download/**') {
 			before = {
 				return true

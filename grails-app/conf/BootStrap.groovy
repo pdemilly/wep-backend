@@ -18,6 +18,10 @@ class BootStrap {
                         return it.toStringMongod()
                 }
 
+		JSON.registerObjectMarshaller(Date) {
+			return it?.format("dd-MM-yyyy")
+		 }
+
     }
     def destroy = {
     }

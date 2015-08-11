@@ -27,6 +27,17 @@ class UrlMappings {
                 }
 
 
+		// TODO: Change this to less generic than download and upload
+		"/fs/$type/$id(.$format)?" {
+			controller = 'gridFs'
+			action = 'download'
+		}
+
+		"/upload/$type(.$format)?" {
+			controller = 'gridFs'
+			action = 'upload'
+		}
+
 		// accessing Monfodb console
 
 		"/mongo/$dbname?/$colname?" {
@@ -40,7 +51,5 @@ class UrlMappings {
 		    }
 		}
 
-		"/"(view:"/index")
-		"500"(view:'/error')
 	}
 }

@@ -120,7 +120,7 @@ log4j.main = {
         all 'com.brandseye.cors'
 }
 
-cors.allow.origin.regex = 'http:\\/\\/dev\\.newgenesys\\.com|http:\\/\\/fiddle\\.jshell\\.net|http:\\/\\/jsfiddle\\.net|http:\\/\\/crs\\.newgenesys\\.com'
+cors.allow.origin.regex = 'http:\\/\\/dev\\.newgenesys\\.com|http:\\/\\/fiddle\\.jshell\\.net|http:\\/\\/jsfiddle\\.net|http:\\/\\/crs\\.newgenesys\\.com|http:\\/\\/wep\\.mantra-soft\\.com'
 // cors.headers = ['Access-Control-Allow-Origin': ~/http:\/\/dev.newgenesys.com|http:\/\/fiddle.jshell.net|http:\/\/jsfiddle.net|http:\/\/crs.newgenesys.com/ ]
 cors.enabled = true
 
