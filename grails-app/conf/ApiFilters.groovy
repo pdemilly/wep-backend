@@ -79,7 +79,7 @@ class ApiFilters {
 
 		// TODO: We should validate before uploading documents - good for now
 
-		download (uri: '/upload/**') {
+		upload (uri: '/upload/**') {
 			before = {
 				if (request.JSON) {
 					params.data = [:]
@@ -89,7 +89,7 @@ class ApiFilters {
 			}
 		}
 
-		download (uri: '/fs/**') {
+		fs (uri: '/fs/**') {
 			before = {
 				if (request.JSON) {
 					params.data = [:]

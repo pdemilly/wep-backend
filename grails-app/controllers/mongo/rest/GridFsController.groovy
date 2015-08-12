@@ -15,17 +15,35 @@ class GridFsController {
 	static allowedMethods = [ GET: 'download', POST: 'upload' ]
 
 	def mongodbService
+	def crsService
 
 	def mimeParser = new Magic ()
 
-	def download (String type, String id) {
+	def download (String org, String type, String id) {
 
-		println "GridFS: Download ${type} ${id}"
+		println "GridFS: Download ${org} ${type} ${id}"
+		crsService.organization.id = org
 		def bucket = mongodbService.DB.getBucket(type)
 		def doc = bucket.findOne (new ObjectId (id))
 
 		response.outputStream << doc.inputStream
 		response.contentType = doc.contentType
+	}
+
+	def getUrl (String type, String id) {
+
+		def bucket = mongodbService.DB.getBucket (type)
+		if (bucket) {
+			def doc = bucket.findOne (new ObjectId (id))
+			if (doc) {
+				respond _id: "$type/$id", uri: "download/${crsService.organization.id}/${type}/${id}"
+			}
+			else {
+				respond error: "Document: $type/$id not found", status: "$NOT_FOUND"
+			}
+		}
+		else
+			respond error: "Bucket: $type doesnt exist", status: "$NOT_FOUND"
 	}
 
         def upload (String type) {

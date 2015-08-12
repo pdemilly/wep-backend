@@ -27,15 +27,22 @@ class UrlMappings {
                 }
 
 
-		// TODO: Change this to less generic than download and upload
-		"/fs/$type/$id(.$format)?" {
+		// TODO: GridFS access method 
+
+		"/download/$org/$type/$id" (parseRequest: true) {
 			controller = 'gridFs'
 			action = 'download'
 		}
 
+
 		"/upload/$type(.$format)?" {
 			controller = 'gridFs'
-			action = 'upload'
+			action = [ POST: 'upload' ]
+		}
+
+		"/api/v1/fs/$type/$id(.$format)?" {
+			controller = 'gridFs'
+			action = [ GET: 'getUrl' ]
 		}
 
 		// accessing Monfodb console
