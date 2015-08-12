@@ -29,8 +29,7 @@ class MongoRestfulController {
 
                 def result = []
                 mongodbService.DB."$collection".find(params.where).skip(p.offset).limit(p.max).each {
-                        // it.id = it.remove ('_id')
-                        result << it
+                        result << normalize(it)
                 }
                 respond result, [ status: OK ]
 	}
@@ -42,15 +41,15 @@ class MongoRestfulController {
 
                 if (id) {
 			println "looking for $id"
-                        result = mongodbService.DB."$collection".findOne ([ _id: new ObjectId (id) ])
+                        result = findOneById (collection, id)
                 }
 
-                respond result ?: [ error: "$id not found in $collection", status: 404 ]
+                respond result ? normalize(result) : [ error: "$id not found in $collection", status: 404 ]
 	}
 
 	@Transactional
         def create () {
-		def collection = params.collection
+		String collection = params.collection
                 println ">>> MONGO create ${collection}: ${params}"
 
                 // params.each { k, v -> println "params [$k] ="; println "\t<<$v>>" }
@@ -62,7 +61,7 @@ class MongoRestfulController {
                 }
                 else {
                         mongodbService.DB."$collection" << obj
-			respond obj
+			respond normalize(obj)
                 }
         }
 
@@ -70,18 +69,42 @@ class MongoRestfulController {
 
 	@Transactional
 	def update(String id) {
-		def collection = params.collection
+		String collection = params.collection
                 println ">>> MONGO update ${collection}: ${params}"
 
-                def obj = params.data.findAll { it.key != '_id' }
+		if (!params.data['_id']) {
+			return create ()
+		}
+
+                def obj = params.data
                 if (!obj) {
-                        respond error: "obj is not defined", status: "${METHOD_FAILURE}"
+                        respond error: "Nothing to update", status: "${METHOD_FAILURE}"
                 }
                 else {
-                        mongodbService.DB."$collection".update ([ _id: new ObjectId (id) ], obj)
-                        def result = mongodbService.DB."$collection".findOne ([ _id: new ObjectId (id) ])
-			respond result
+			if (obj._id) {
+				id = obj.remove ('_id') // we need to remove it because not an ObjectID
+				mongodbService.DB."$collection".update ([ _id: new ObjectId (id) ], obj)
+			}
+			else
+				mongodbService.DB."$collection".update ([ id: id ], obj)
+
+                        def result = findOneById (collection, id)
+			respond normalize(result)
                 }
 	}
 
+	protected findOneById (String collection, String id) {
+		def obj = mongodbService.DB."$collection".findOne ([ id: id ])
+		if (!obj) {
+			obj = mongodbService.DB."$collection".findOne ([ _id: new ObjectId (id) ])
+		}
+
+		return obj
+	}
+
+	protected normalize (obj) {
+		if (!obj.id)
+		   obj.id = "${obj._id}"
+		return obj
+	}
 }
