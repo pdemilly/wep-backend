@@ -31,7 +31,8 @@ class MongoRestfulController {
                 mongodbService.DB."$collection".find(params.where).skip(p.offset).limit(p.max).each {
                         result << normalize(it)
                 }
-                respond result, [ status: OK ]
+                // respond result, [ status: OK ]
+		respond result
 	}
 
 	def show(String id) {
@@ -44,7 +45,10 @@ class MongoRestfulController {
                         result = findOneById (collection, id)
                 }
 
-                respond result ? normalize(result) : [ error: "$id not found in $collection", status: 404 ]
+		if (result)
+			respond normalize(result) 
+		else
+			render error: "$id not found in $collection", status: 404 
 	}
 
 	@Transactional
@@ -57,7 +61,7 @@ class MongoRestfulController {
                 def obj = params.data
 
                 if (!obj) {
-                        respond error: "obj is not defined", status: "${METHOD_FAILURE}"
+                        render error: "obj is not defined", status: "${METHOD_FAILURE}"
                 }
                 else {
                         mongodbService.DB."$collection" << obj
@@ -72,16 +76,16 @@ class MongoRestfulController {
 		String collection = params.collection
                 println ">>> MONGO update ${collection}: ${params}"
 
-		if (!params.data['_id']) {
+		if (!params?.data?._id) {
 			return create ()
 		}
 
                 def obj = params.data
                 if (!obj) {
-                        respond error: "Nothing to update", status: "${METHOD_FAILURE}"
+                        render error: "Nothing to update", status: "${METHOD_FAILURE}"
                 }
                 else {
-			if (obj._id) {
+			if (obj?._id) {
 				id = obj.remove ('_id') // we need to remove it because not an ObjectID
 				mongodbService.DB."$collection".update ([ _id: new ObjectId (id) ], obj)
 			}
