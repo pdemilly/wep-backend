@@ -93,14 +93,21 @@ class MongoRestfulController {
 				mongodbService.DB."$collection".update ([ id: id ], obj)
 
                         def result = findOneById (collection, id)
-			respond normalize(result)
+			if (result)
+				respond normalize(result) 
+			else
+				render error: "$id not found in $collection", status: 404 
                 }
 	}
 
 	protected findOneById (String collection, String id) {
 		def obj = mongodbService.DB."$collection".findOne ([ id: id ])
 		if (!obj) {
-			obj = mongodbService.DB."$collection".findOne ([ _id: new ObjectId (id) ])
+			try {
+				obj = mongodbService.DB."$collection".findOne ([ _id: new ObjectId (id) ])
+			} catch (e) {
+				return null
+			}
 		}
 
 		return obj

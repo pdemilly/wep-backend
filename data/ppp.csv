@@ -1,0 +1,31 @@
+id, loan_balance ,interest_rate, year_remaining ,current_treasury_rate,yield_spread_spectrum, ppp ,formula,source,ppp_confirmed
+F94," $9,995,885.00 ",,,,," $2,732,728.00 ",per p/o as of 10/11/12,,yes
+S56,,,,,, $-   ,Needs Verification,,No
+S57,,,,,, $-   ,Needs Verification,,No
+S59,,,,,, $-   ,Needs Verification,,No
+F83,,, 5.00 ,1%,Yes," $309,767.00 ",as per p/o 10/4/12,Schedule A of Note,Yes
+F86,,, 4.00 ,1%,Yes," $341,500.00 ",as per p/o 10/04/12,Note,Yes
+F87,,, 4.20 ,1%,Yes," $391,570.00 ",as per p/o 10/04/12,,Yes
+F88," $530,564.00 ",, 5.00 ,1%,Yes," $126,154.00 ",per p/o as of 10/4/12,,Yes
+F81,,,,,,,,,
+F82,,,,,, $-   ,Needs Verification,,No
+F84,,, 4.00 ,1%,Yes, $-   ,Yield Maintenance per Note,,No
+F85," $2,222,903.00 ",, 18.00 ,2%,Yes, $-   ,no pp as per p/o 10/01/12,Note,Yes
+F89,,,,,,,,,
+F90,,, 10.00 ,2%,Yes, $-   ,Yield Maintenance per Note,,No
+F91,,,,,, $-   ,Needs Verification,,No
+F92," $858,573.00 ",,,,," $134,296.00 ",as per p/o 10/02/2012,,Yes
+S47,,, 26.00 ,3%,Yes," $902,206.00 ",per p/o as of 9/28/12,,Yes
+S55,,, 5.20 ,1%,Yes," $1,050,556.00 ",per p/o as 10/02/2012,p/o,Yes
+S52,,,,,, $-   ,Needs Verification,,No
+F93," $1,224,880.00 ",, 21.00 ,2%,Yes," $41,012.11 ",Prepayment Penalty per p/o  as of 9/19/2012,Note,Yes
+F78,,, 9.50 ,1%,Yes," $508,069.00 ",Per Berkadia 8/5/2012,Note,Yes
+F93,,,,,No, $-   ,No Prepayment Penalty,Note,No
+N/A,,, 2.00 ,,No, $-   ,no Prepayment Penalty per p/o  as of 9/20/2012,Note,Yes
+F75,,, 4.00 ,1%,Yes," $182,384.00 ","Yield Maintenance, Per payoff statement as of 8/10/12",Note,Yes
+S58,,,,,, $-   ,"Unknown, loan is extended each year",Loan Agreements,No
+F77,,,,,,,,,
+F79,,,,,No, $-   ,Construction,Const,No
+F78,,, 28.00 ,3%,Yes," $274,271.00 ",per p/o as of 10/01/12,Note,Yes
+F 76,,, 8.00 ,2%,Yes," $482,693.00 ",per p/o as 10/03/12,,Yes
+F 74,,, 9.00 ,1%,Yes," $576,531.00 ",per p/o as of 10/03/2012,,Yes

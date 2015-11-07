@@ -2,32 +2,45 @@ class UrlMappings {
 
 	static mappings = {
 
-                // Generic Rest Mapping 
-                "/api/$namespace/$collection(.$format)?" (parseRequest: true) {
-			controller = 'mongoRestful'
-                        action = [GET:'index', PUT:'replaceAll', DELETE:'deleteAll', POST:'create']
-                        constraints {
-                                println "Generic rest mapping 1: $controllerName $actionName"
-                        }
-                }
+		group ('/api') {
 
-                "/api/$namespace/$collection/$id?(.$format)?" {
-			controller = 'mongoRestful'
-                        action = [GET:'show', PUT:'update', DELETE:'delete']
-                        constraints {
-                                println "Generic rest mapping 2: $controllerName $actionName $id"
-                        }
-                }
+			// Generic Rest Mapping 
+			"/$namespace/$collection(.$format)?" (parseRequest: true) {
+				controller = 'mongoRestful'
+				action = [GET:'index', PUT:'replaceAll', DELETE:'deleteAll', POST:'create']
+				constraints {
+					println "Generic rest mapping 1: $controllerName $actionName"
+				}
+			}
 
-                "/api/$namespace/$collection/$action/$id(.$format)?" {
-			controller = 'mongoRestful'
-                        constraints {
-                                // println "Generic rest mapping 3: $controllerName $actionName $id"
-                        }
-                }
+			"/$namespace/$collection/$id?(.$format)?" {
+				controller = 'mongoRestful'
+				action = [GET:'show', PUT:'update', DELETE:'delete']
+				constraints {
+					println "Generic rest mapping 2: $controllerName $actionName $id"
+				}
+			}
+
+			"/$namespace/$collection/$action/$id(.$format)?" {
+				controller = 'mongoRestful'
+				constraints {
+					// println "Generic rest mapping 3: $controllerName $actionName $id"
+				}
+			}
 
 
-		// TODO: GridFS access method 
+			"/$namespace/$collection/aggregate(.$format)?" {
+				controller = 'mongoAggregator'
+				constraints {
+				}
+			}
+
+			"/v1/fs/$type/$id(.$format)?" {
+				controller = 'gridFs'
+				action = [ GET: 'getUrl' ]
+			}
+
+		}
 
 		"/download/$org/$type/$id" (parseRequest: true) {
 			controller = 'gridFs'
@@ -38,11 +51,6 @@ class UrlMappings {
 		"/upload/$type(.$format)?" {
 			controller = 'gridFs'
 			action = [ POST: 'upload' ]
-		}
-
-		"/api/v1/fs/$type/$id(.$format)?" {
-			controller = 'gridFs'
-			action = [ GET: 'getUrl' ]
 		}
 
 		// accessing Monfodb console
