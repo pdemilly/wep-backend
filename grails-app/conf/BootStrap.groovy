@@ -14,7 +14,7 @@ class BootStrap {
                 }
 
                 JSON.registerObjectMarshaller(ObjectId) {
-                        println "coverting an objectid"
+                        // println "coverting an objectid"
                         return it.toStringMongod()
                 }
 

@@ -2,56 +2,27 @@ class UrlMappings {
 
 	static mappings = {
 
-		group ('/api') {
+                def restMapping=[GET:"index", PUT:"replaceAll", DELETE:"deleteAll", POST:"create"]
+                def restMappingWithId=[GET:"show", PUT:"update", DELETE:"delete"]
 
-			// Generic Rest Mapping 
-			"/$namespace/$collection(.$format)?" (parseRequest: true) {
-				controller = 'mongoRestful'
-				action = [GET:'index', PUT:'replaceAll', DELETE:'deleteAll', POST:'create']
-				constraints {
-					println "Generic rest mapping 1: $controllerName $actionName"
-				}
-			}
+                group ('/api') {
 
-			"/$namespace/$collection/$id?(.$format)?" {
-				controller = 'mongoRestful'
-				action = [GET:'show', PUT:'update', DELETE:'delete']
-				constraints {
-					println "Generic rest mapping 2: $controllerName $actionName $id"
-				}
-			}
+			// FIXME: Do something about gridFS - problem1: namespace - problem2: uri
+			"/$namespace/fs/$type/$id(.$format)?"			(controller: 'gridFs', action: 'url', method: 'GET')
 
-			"/$namespace/$collection/$action/$id(.$format)?" {
-				controller = 'mongoRestful'
-				constraints {
-					// println "Generic rest mapping 3: $controllerName $actionName $id"
-				}
-			}
+                        //***************************** Generic Rest Mapping **************************************************//
 
-
-			"/$namespace/$collection/aggregate(.$format)?" {
-				controller = 'mongoAggregator'
-				constraints {
-				}
-			}
-
-			"/v1/fs/$type/$id(.$format)?" {
-				controller = 'gridFs'
-				action = [ GET: 'getUrl' ]
-			}
+                        "/$namespace/$collection/count(.$format)?"              (controller: 'mongoRestful', action: 'count')
+                        "/$namespace/$collection/aggregate(.$format)?"          (controller: 'mongoAggregator', parseRequest: true)
+                        "/$namespace/$collection(.$format)?"                    (controller: 'mongoRestful', action: restMapping, parseRequest: true)
+                        "/$namespace/$collection/$id(.$format)?"                (controller: 'mongoRestful', action: restMappingWithId, parseRequest: true)
+                        "/$namespace/$collection/$action/$id(.$format)?"        (controller: 'mongoRestful', parseRequest: true)
 
 		}
 
-		"/download/$org/$type/$id" (parseRequest: true) {
-			controller = 'gridFs'
-			action = 'download'
-		}
-
-
-		"/upload/$type(.$format)?" {
-			controller = 'gridFs'
-			action = [ POST: 'upload' ]
-		}
+		// FIXME: do something about namespace
+		"/download/$org/$type/$id"	(namespace: 'v1', controller: 'gridFs', action: 'download', method: 'GET', parseRequest: true)
+		"/upload/$type(.$format)?"	(namespace: 'v1', controller: 'gridFs', action: 'upload', method: 'POST', parseRequest: true) 
 
 		// accessing Monfodb console
 
@@ -59,12 +30,5 @@ class UrlMappings {
 			controller = "mviewer"
 			action = "dispatchLink"
 		}
-
-		"/$controller/$action?/$id?(.$format)?"{
-		    constraints {
-			// apply constraints here
-		    }
-		}
-
 	}
 }

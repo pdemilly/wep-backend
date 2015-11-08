@@ -21,14 +21,18 @@ class MongoRestfulController {
 		def collection = params.collection
 		println ">>> MONGO: index: ${collection}: ${params}"
 
-		params.max = (params.max && params.int('max') > 0) ? params.int('max') : mongodbService.DB."$collection".count() as Integer
+		params.limit = (params.limit && params.int('limit') > 0) ? params.int('limit') : mongodbService.DB."$collection".count() as Integer
                 params.offset = Math.max (params.int('offset') ?: 0, 0)
                 params.where = params.where ? JSON.parse (params.where) : [:]
 
-                def p = params.findAll { it.key in [ 'max', 'offset' ] }
+		if (params.filter) {
+			params.where += [ '$text': [ '$search': params.filter ] ]
+		}
+
+                def p = params.findAll { it.key in [ 'limit', 'offset' ] }
 
                 def result = []
-                mongodbService.DB."$collection".find(params.where).skip(p.offset).limit(p.max).each {
+                mongodbService.DB."$collection".find(params.where).skip(p.offset).limit(p.limit).each {
                         result << normalize(it)
                 }
                 // respond result, [ status: OK ]

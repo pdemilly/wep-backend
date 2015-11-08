@@ -11,8 +11,10 @@ import org.bson.types.ObjectId
 
 class GridFsController {
 
+	static namespace = 'v1'
+
 	static responseFormats = ['json', 'xml']
-	static allowedMethods = [ GET: 'download', POST: 'upload' ]
+	static allowedMethods = [ download: 'GET', url: 'GET', upload: 'POST' ]
 
 	def mongodbService
 	def crsService
@@ -22,6 +24,7 @@ class GridFsController {
 	def download (String org, String type, String id) {
 
 		println "GridFS: Download ${org} ${type} ${id}"
+		// TODO: We should not have to do that
 		crsService.organization.id = org
 		def bucket = mongodbService.DB.getBucket(type)
 		def doc = bucket.findOne (new ObjectId (id))
@@ -30,8 +33,9 @@ class GridFsController {
 		response.contentType = doc.contentType
 	}
 
-	def getUrl (String type, String id) {
+	def url (String type, String id) {
 
+		println "GRIDFS: URL: $type $id"
 		def bucket = mongodbService.DB.getBucket (type)
 		if (bucket) {
 			def doc = bucket.findOne (new ObjectId (id))
