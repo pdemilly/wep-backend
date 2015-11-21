@@ -74,12 +74,15 @@ class MongoAggregatorController {
 
 	private execute2 () {
 		def collection = params.collection
-		def rows = JSON.parse (params.rows ?: "[]").collectEntries  { field -> [ (field):('$'+field) ] }
-		def columns = JSON.parse (params.columns ?: "[]").collectEntries  { field -> [ (field):('$'+field) ] }
-		def values = JSON.parse (params.values ?: "{}")
-		def pre_condition = JSON.parse (params.pre_condition ?: "{}")
-		def post_condition = JSON.parse (params.post_condition ?: "{}")
-		def orderBy = JSON.parse(params.orderBy ?: "{}")
+		def aggregate = JSON.parse (params.aggregate) ?: [:]
+
+		def rows = (aggregate.rows ?: [:]).collectEntries  { field -> [ (field):('$'+field) ] }
+		def columns = (aggregate.columns ?: [:]).collectEntries  { field -> [ (field):('$'+field) ] }
+		def values = (aggregate.values ?: [:])
+		def pre_condition = (aggregate.pre_condition ?: [:])
+		def post_condition = (aggregate.post_condition ?: [:])
+		def orderBy = (aggregate.orderBy ?: [:])
+
 		def query = []
 
 		if (pre_condition) 

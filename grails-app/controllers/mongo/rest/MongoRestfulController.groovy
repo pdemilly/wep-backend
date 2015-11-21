@@ -13,30 +13,38 @@ class MongoRestfulController {
 	static namespace = 'v1'
 
 	static responseFormats = ['json', 'xml']
-	static allowedMethods = [index: "GET", show: "GET", create: "POST", update: "PUT", delete: "DELETE"]
+	static allowedMethods = [ index: 'GET', show: 'GET', 'count': 'GET', create: 'POST', update: 'PUT', delete: 'DELETE']
 
 	static mongodbService
 
 	def index() {
-		def collection = params.collection
-		println ">>> MONGO: index: ${collection}: ${params}"
 
-		params.limit = (params.limit && params.int('limit') > 0) ? params.int('limit') : mongodbService.DB."$collection".count() as Integer
+		params.limit = (params.limit && params.int('limit') > 0) ? params.int('limit') : 0
                 params.offset = Math.max (params.int('offset') ?: 0, 0)
+
+		def result = []
+		list().skip(params.offset).limit(params.limit).each {
+                        result << normalize(it)
+                }
+		respond result
+	}
+
+	def count() {
+		def result =  [ count: list().count() ]
+		respond result
+	}
+
+	private list() {
+		def collection = params.collection
+		println ">>> MONGO: list: ${collection}: ${params}"
+
                 params.where = params.where ? JSON.parse (params.where) : [:]
 
 		if (params.filter) {
 			params.where += [ '$text': [ '$search': params.filter ] ]
 		}
 
-                def p = params.findAll { it.key in [ 'limit', 'offset' ] }
-
-                def result = []
-                mongodbService.DB."$collection".find(params.where).skip(p.offset).limit(p.limit).each {
-                        result << normalize(it)
-                }
-                // respond result, [ status: OK ]
-		respond result
+                return mongodbService.DB."$collection".find(params.where)
 	}
 
 	def show(String id) {
